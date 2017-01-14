@@ -31,3 +31,11 @@ float[] collectData(int[] intArray) {
 	values[i - j] = whatsTheWeather() + whatsTheWeather(5) + whatsTheWeather(i, j, whatsTheWeather(whatsTheWeather[9]));
 	return values[100 / 2];
 }
+
+void noMorePlusEquals() {
+	i++;
+	++i;
+	j = i--;
+	k = --i[3];
+	return !i++;
+}

@@ -34,6 +34,8 @@
 %token <ival> INT_LITERAL "integer literal"
 %token <cval> CHAR_LITERAL "character literal"
 %token <sval> STRING_LITERAL "string literal"
+%token INCREMENT "++"
+%token DECREMENT "--"
 %token SHIFT_LEFT "<<"
 %token SHIFT_RIGHT ">>"
 %token AND "&&"
@@ -64,7 +66,7 @@
 %left "<<" ">>"
 %left '+' '-'
 %left '*' '/' '%'
-%precedence UNARY_MINUS UNARY_PLUS NOT
+%precedence UNARY_MINUS UNARY_PLUS NOT INCREMENT DECREMENT
 %precedence '[' ']' '(' ')'
 
 %%
@@ -150,6 +152,10 @@ expression:
 	|	IDENTIFIER
 	|	expression '[' expression ']'
 	|	expression '(' expression_list ')'
+	|	expression "++"
+	|	expression "--"
+	|	"++" expression
+	|	"--" expression
 	|	'-' expression %prec UNARY_MINUS
 	|	'+' expression %prec UNARY_PLUS
 	|	'!' expression %prec NOT
