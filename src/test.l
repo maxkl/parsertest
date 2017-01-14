@@ -22,8 +22,6 @@
 <COMMENT>.
 "//".*
 
-"++"						{ return INCREMENT; }
-"--"						{ return DECREMENT; }
 "<<"						{ return SHIFT_LEFT; }
 ">>"						{ return SHIFT_RIGHT; }
 "&&"						{ return AND; }

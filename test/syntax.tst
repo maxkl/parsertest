@@ -33,9 +33,8 @@ float[] collectData(int[] intArray) {
 }
 
 void noMorePlusEquals() {
-	i++;
-	++i;
-	j = i--;
-	k = --i[3];
-	return !i++;
+	i += 1;
+	j = i -= 1;
+	k = i[3] -= 1;
+	return !(i += 1);
 }

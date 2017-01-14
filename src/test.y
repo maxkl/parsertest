@@ -10,7 +10,7 @@
 	void yyerror(yyscan_t *, const char *);
 %}
 
-%glr-parser
+/*%glr-parser*/
 %define api.pure
 %define parse.error verbose
 %lex-param {yyscan_t scanner}
@@ -34,8 +34,6 @@
 %token <ival> INT_LITERAL "integer literal"
 %token <cval> CHAR_LITERAL "character literal"
 %token <sval> STRING_LITERAL "string literal"
-%token INCREMENT "++"
-%token DECREMENT "--"
 %token SHIFT_LEFT "<<"
 %token SHIFT_RIGHT ">>"
 %token AND "&&"
@@ -54,8 +52,8 @@
 %token BIT_OR_EQUAL "|="
 %token SHIFT_LEFT_EQUAL "<<="
 %token SHIFT_RIGHT_EQUAL ">>="
-%precedence ','
-%left '=' "+=" "-=" "*=" "/=" "%=" "&=" "|=" "^=" "<<=" ">>="
+%left ','
+%right '=' "+=" "-=" "*=" "/=" "%=" "&=" "|=" "^=" "<<=" ">>="
 %left "||"
 %left "&&"
 %left '|'
@@ -66,8 +64,8 @@
 %left "<<" ">>"
 %left '+' '-'
 %left '*' '/' '%'
-%precedence UNARY_MINUS UNARY_PLUS NOT INCREMENT DECREMENT
-%precedence '[' ']' '(' ')'
+%right UNARY_MINUS UNARY_PLUS NOT
+%precedence '[' '('
 
 %%
 
@@ -152,10 +150,6 @@ expression:
 	|	IDENTIFIER
 	|	expression '[' expression ']'
 	|	expression '(' expression_list ')'
-	|	expression "++"
-	|	expression "--"
-	|	"++" expression
-	|	"--" expression
 	|	'-' expression %prec UNARY_MINUS
 	|	'+' expression %prec UNARY_PLUS
 	|	'!' expression %prec NOT
