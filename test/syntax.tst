@@ -28,5 +28,6 @@ bool functionWithVars(int a) {
 float[] collectData(int[] intArray) {
 	float[] values = intArray | "iknowthismakesnosense";
 	values[83742 + 1 - intArray[2]] = !-+!notExisting[values[-26 * "asdf"[3]]];
+	values[i - j] = whatsTheWeather() + whatsTheWeather(5) + whatsTheWeather(i, j, whatsTheWeather(whatsTheWeather[9]));
 	return values[100 / 2];
 }

@@ -64,7 +64,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %precedence UNARY_MINUS UNARY_PLUS NOT
-%precedence '[' ']'
+%precedence '[' ']' '(' ')'
 
 %%
 
@@ -148,6 +148,7 @@ expression:
 	|	CHAR_LITERAL
 	|	IDENTIFIER
 	|	expression '[' expression ']'
+	|	expression '(' expression_list ')'
 	|	'-' expression %prec UNARY_MINUS
 	|	'+' expression %prec UNARY_PLUS
 	|	'!' expression %prec NOT
@@ -181,6 +182,16 @@ expression:
 	|	expression "<<=" expression
 	|	expression ">>=" expression
 	|	'(' expression ')'
+	;
+
+expression_list:
+		%empty
+	|	expression_list_notempty
+	;
+
+expression_list_notempty:
+		expression
+	|	expression_list_notempty ',' expression
 	;
 
 %%
