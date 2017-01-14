@@ -28,7 +28,6 @@
 %token FLOAT "float"
 %token BOOL "bool"
 %token CHAR "char"
-%token ARRAY "array"
 %token STRING "string"
 %token RETURN "return"
 %token <sval> IDENTIFIER "identifier"
@@ -82,12 +81,16 @@ function:
 	;
 
 type:
+		type_name
+	|	type_name '[' ']'
+	;
+
+type_name:
 		VOID
 	|	INT
 	|	FLOAT
 	|	BOOL
 	|	CHAR
-	|	ARRAY
 	|	STRING
 	;
 

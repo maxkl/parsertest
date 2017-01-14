@@ -16,11 +16,16 @@ string whatsTheWeather(char c /* Whoa! You can put comments really anywhere */, 
 	return "It'll be cloudy with a chance of parser errors" * 'h' - '\0' % !(+-blub);
 }
 
-array functionWithVars(int a) {
+bool functionWithVars(int a) {
 	int b;
 	int c, d;
 	int e = 9;
 	int f, g = '\0';
 	e += g = a;
 	return e;
+}
+
+float[] collectData(int[] intArray) {
+	float[] values = intArray | "iknowthismakesnosense";
+	return values;
 }

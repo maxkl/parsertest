@@ -47,7 +47,6 @@ int							{ return INT; }
 float						{ return FLOAT; }
 bool						{ return BOOL; }
 char						{ return CHAR; }
-array						{ return ARRAY; }
 string						{ return STRING; }
 return						{ return RETURN; }
 
