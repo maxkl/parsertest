@@ -4,7 +4,7 @@ out_dir := out
 
 CC := gcc
 CFLAGS := -Wall -Wextra -O2
-LDFLAGS := -lfl
+LDFLAGS :=
 
 mkdirp = @dir=$(dir $@); [ -d "$$dir" ] || mkdir -p "$$dir"
 

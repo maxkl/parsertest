@@ -9,8 +9,8 @@
 %}
 
 %option reentrant bison-bridge
-%option noinput
-%option nounput
+%option warn nodefault noyywrap
+%option noinput nounput
 
 %x COMMENT
 
