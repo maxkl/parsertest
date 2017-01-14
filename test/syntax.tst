@@ -27,5 +27,6 @@ bool functionWithVars(int a) {
 
 float[] collectData(int[] intArray) {
 	float[] values = intArray | "iknowthismakesnosense";
-	return values;
+	values[83742 + 1 - intArray[2]] = !-+!notExisting[values[-26 * "asdf"[3]]];
+	return values[100 / 2];
 }

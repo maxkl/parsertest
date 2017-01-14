@@ -64,6 +64,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %precedence UNARY_MINUS UNARY_PLUS NOT
+%precedence '[' ']'
 
 %%
 
@@ -146,6 +147,7 @@ expression:
 	|	INT_LITERAL
 	|	CHAR_LITERAL
 	|	IDENTIFIER
+	|	expression '[' expression ']'
 	|	'-' expression %prec UNARY_MINUS
 	|	'+' expression %prec UNARY_PLUS
 	|	'!' expression %prec NOT
