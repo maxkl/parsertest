@@ -15,3 +15,12 @@ int fn1(float floatArg, bool boolArg) {
 string whatsTheWeather(char c /* Whoa! You can put comments really anywhere */, char blub) {
 	return "It'll be cloudy with a chance of parser errors" * 'h' - '\0' % !(+-blub);
 }
+
+array functionWithVars(int a) {
+	int b;
+	int c, d;
+	int e = 9;
+	int f, g = '\0';
+	e += g = a;
+	return e;
+}

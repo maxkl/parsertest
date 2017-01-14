@@ -111,12 +111,27 @@ statements:
 	;
 
 statement:
-		return_statement
-	|	expression_statement
+		expression_statement
+	|	var_decl_statement
+	|	return_statement
 	;
 
 expression_statement:
 		expression ';'
+	;
+
+var_decl_statement:
+		type var_decl_list ';'
+	;
+
+var_decl_list:
+		var_decl
+	|	var_decl_list ',' var_decl
+	;
+
+var_decl:
+		IDENTIFIER
+	|	IDENTIFIER '=' expression
 	;
 
 return_statement:
