@@ -8,6 +8,7 @@
 	char char_value(char *, size_t);
 %}
 
+%option reentrant bison-bridge
 %option noinput
 %option nounput
 
@@ -50,11 +51,11 @@ array						{ return ARRAY; }
 string						{ return STRING; }
 return						{ return RETURN; }
 
-[a-zA-Z_][a-zA-Z_0-9]*		{ yylval.sval = strdup(yytext); return IDENTIFIER; }
+[a-zA-Z_][a-zA-Z_0-9]*		{ yylval->sval = strdup(yytext); return IDENTIFIER; }
 
-[0-9]+						{ yylval.ival = atoi(yytext); return INT_LITERAL; }
-\"(\\.|[^\\"])*\"			{ yylval.sval = string_contents(yytext, yyleng); return STRING_LITERAL; }
-\'(\\.|[^\\'])\'			{ yylval.cval = char_value(yytext, yyleng); return CHAR_LITERAL; }
+[0-9]+						{ yylval->ival = atoi(yytext); return INT_LITERAL; }
+\"(\\.|[^\\"])*\"			{ yylval->sval = string_contents(yytext, yyleng); return STRING_LITERAL; }
+\'(\\.|[^\\'])\'			{ yylval->cval = char_value(yytext, yyleng); return CHAR_LITERAL; }
 
 [[:space:]]+				// Ignore
 

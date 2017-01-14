@@ -2,14 +2,19 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 
-	int yylex();
-	FILE *yyin;
+	typedef void *yyscan_t;
 
-	void yyerror(const char *);
+	#include "test.y.h"
+	#include "test.l.h"
+
+	void yyerror(yyscan_t *, const char *);
 %}
 
 %glr-parser
+%define api.pure
 %define parse.error verbose
+%lex-param {yyscan_t scanner}
+%parse-param {yyscan_t scanner}
 
 %union {
 	int ival;
@@ -161,6 +166,9 @@ expression:
 %%
 
 int main(int argc, char **argv) {
+	yyscan_t scanner;
+
+	FILE *stream;
 	if(argc > 1) {
 		FILE *f = fopen(argv[1], "r");
 		if(!f) {
@@ -168,12 +176,21 @@ int main(int argc, char **argv) {
 			exit(-1);
 		}
 
-		yyin = f;
+		stream = f;
+	} else {
+		stream = stdin;
 	}
 
-	return yyparse();
+	yylex_init(&scanner);
+	yyset_in(stream, scanner);
+
+	int ret = yyparse(scanner);
+
+	yylex_destroy(scanner);
+
+	return ret;
 }
 
-void yyerror (char const *s) {
+void yyerror (yyscan_t *scanner, char const *s) {
 	fprintf(stderr, "%s\n", s);
 }

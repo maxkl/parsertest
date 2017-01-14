@@ -25,8 +25,8 @@ $(out_dir)/test: $(out_dir)/test.y.c $(out_dir)/test.l.c
 
 $(out_dir)/test.y.c: $(src_dir)/test.y
 	$(mkdirp)
-	bison -d -o $@ $<
+	bison --defines=$(@:.c=.h) -o $@ $<
 
 $(out_dir)/test.l.c: $(src_dir)/test.l
 	$(mkdirp)
-	flex -o $@ $<
+	flex --header-file=$(@:.c=.h) -o $@ $<
