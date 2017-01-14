@@ -77,7 +77,7 @@ toplevel_statement:
 	;
 
 function:
-		type IDENTIFIER '(' arglist ')' '{' statements '}'
+		type IDENTIFIER '(' parameter_list ')' '{' statements '}'
 	;
 
 type:
@@ -94,17 +94,17 @@ type_name:
 	|	STRING
 	;
 
-arglist:
+parameter_list:
 		%empty
-	|	arglist_notempty
+	|	parameter_list_notempty
 	;
 
-arglist_notempty:
-		arg
-	|	arglist_notempty ',' arg
+parameter_list_notempty:
+		parameter
+	|	parameter_list_notempty ',' parameter
 	;
 
-arg:
+parameter:
 		type IDENTIFIER
 	;
 
