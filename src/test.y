@@ -52,6 +52,7 @@
 %token BIT_OR_EQUAL "|="
 %token SHIFT_LEFT_EQUAL "<<="
 %token SHIFT_RIGHT_EQUAL ">>="
+%precedence ','
 %left '=' "+=" "-=" "*=" "/=" "%=" "&=" "|=" "^=" "<<=" ">>="
 %left "||"
 %left "&&"
