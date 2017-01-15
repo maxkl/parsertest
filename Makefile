@@ -19,6 +19,9 @@ clean:
 test:
 	@bats tests.bats
 
+tools/lemon/lemon: tools/lemon/lemon.c
+	gcc -Wall -Wextra -O2 -o $@ $^
+
 $(out_dir)/test: $(out_dir)/test.y.c $(out_dir)/test.l.c
 	$(mkdirp)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
