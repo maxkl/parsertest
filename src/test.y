@@ -1,26 +1,25 @@
-%{
-	#include <stdio.h>
-	#include <stdlib.h>
-
-	typedef void *yyscan_t;
-
-	#include "test.y.h"
-	#include "test.l.h"
-
-	void yyerror(yyscan_t *, const char *);
-%}
-
-/*%glr-parser*/
-%define api.pure
+%skeleton "lalr1.cc"
+%require "3.0.4"
+%define parse.trace
 %define parse.error verbose
-%lex-param {yyscan_t scanner}
-%parse-param {yyscan_t scanner}
+%define api.token.constructor
+%define api.value.type variant
+%define parse.assert
+%define parser_class_name {test_parser}
 
-%union {
-	int ival;
-	char cval;
-	char *sval;
+%code requires {
+	class test_driver;
 }
+
+%param {test_driver &driver}
+%locations
+%initial-action { @$.begin.filename = @$.end.filename = &driver.filename; }
+
+%code {
+	#include "test-driver.hpp"
+}
+
+%printer { yyoutput << $$; } <*>;
 
 %token END 0 "end of file"
 %token VOID "void"
@@ -30,10 +29,10 @@
 %token CHAR "char"
 %token STRING "string"
 %token RETURN "return"
-%token <sval> IDENTIFIER "identifier"
-%token <ival> INT_LITERAL "integer literal"
-%token <cval> CHAR_LITERAL "character literal"
-%token <sval> STRING_LITERAL "string literal"
+%token <std::string> IDENTIFIER "identifier"
+%token <int> INT_LITERAL "integer literal"
+%token <char> CHAR_LITERAL "character literal"
+%token <std::string> STRING_LITERAL "string literal"
 %token SHIFT_LEFT "<<"
 %token SHIFT_RIGHT ">>"
 %token AND "&&"
@@ -52,23 +51,44 @@
 %token BIT_OR_EQUAL "|="
 %token SHIFT_LEFT_EQUAL "<<="
 %token SHIFT_RIGHT_EQUAL ">>="
-%left ','
-%right '=' "+=" "-=" "*=" "/=" "%=" "&=" "|=" "^=" "<<=" ">>="
+%token NOT "!"
+%token MINUS "-"
+%token PLUS "+"
+%token MULTIPLY "*"
+%token DIVIDE "/"
+%token MODULO "%"
+%token BIT_AND "&"
+%token BIT_XOR "^"
+%token BIT_OR "|"
+%token LESS "<"
+%token GREATER ">"
+%token ASSIGN "="
+%token SEMICOLON ";"
+%token COMMA ","
+%token PARENTHESIS_OPEN "("
+%token PARENTHESIS_CLOSE ")"
+%token BRACE_OPEN "{"
+%token BRACE_CLOSE "}"
+%token BRACKET_OPEN "["
+%token BRACKET_CLOSE "]"
+%left ","
+%right "=" "+=" "-=" "*=" "/=" "%=" "&=" "|=" "^=" "<<=" ">>="
 %left "||"
 %left "&&"
-%left '|'
-%left '^'
-%left '&'
+%left "|"
+%left "^"
+%left "&"
 %left "==" "!="
-%left '<' '>' "<=" ">="
+%left "<" ">" "<=" ">="
 %left "<<" ">>"
-%left '+' '-'
-%left '*' '/' '%'
+%left "+" "-"
+%left "*" "/" "%"
 %right UNARY_MINUS UNARY_PLUS NOT
-%precedence '[' '('
+%precedence "[" "("
 
 %%
 
+%start program;
 program:
 		%empty
 	|	program toplevel_statement
@@ -79,12 +99,12 @@ toplevel_statement:
 	;
 
 function:
-		type IDENTIFIER '(' parameter_list ')' '{' statements '}'
+		type IDENTIFIER "(" parameter_list ")" "{" statements "}"
 	;
 
 type:
 		type_name
-	|	type_name '[' ']'
+	|	type_name "[" "]"
 	;
 
 type_name:
@@ -103,7 +123,7 @@ parameter_list:
 
 parameter_list_notempty:
 		parameter
-	|	parameter_list_notempty ',' parameter
+	|	parameter_list_notempty "," parameter
 	;
 
 parameter:
@@ -122,25 +142,25 @@ statement:
 	;
 
 expression_statement:
-		expression ';'
+		expression ";"
 	;
 
 var_decl_statement:
-		type var_decl_list ';'
+		type var_decl_list ";"
 	;
 
 var_decl_list:
 		var_decl
-	|	var_decl_list ',' var_decl
+	|	var_decl_list "," var_decl
 	;
 
 var_decl:
 		IDENTIFIER
-	|	IDENTIFIER '=' expression
+	|	IDENTIFIER "=" expression
 	;
 
 return_statement:
-		RETURN expression ';'
+		RETURN expression ";"
 	;
 
 expression:
@@ -148,30 +168,30 @@ expression:
 	|	INT_LITERAL
 	|	CHAR_LITERAL
 	|	IDENTIFIER
-	|	expression '[' expression ']'
-	|	expression '(' expression_list ')'
-	|	'-' expression %prec UNARY_MINUS
-	|	'+' expression %prec UNARY_PLUS
-	|	'!' expression %prec NOT
-	|	expression '+' expression
-	|	expression '-' expression
-	|	expression '*' expression
-	|	expression '/' expression
-	|	expression '%' expression
+	|	expression "[" expression "]"
+	|	expression "(" expression_list ")"
+	|	"-" expression %prec UNARY_MINUS
+	|	"+" expression %prec UNARY_PLUS
+	|	"!" expression %prec NOT
+	|	expression "+" expression
+	|	expression "-" expression
+	|	expression "*" expression
+	|	expression "/" expression
+	|	expression "%" expression
 	|	expression "<<" expression
 	|	expression ">>" expression
-	|	expression '&' expression
-	|	expression '^' expression
-	|	expression '|' expression
+	|	expression "&" expression
+	|	expression "^" expression
+	|	expression "|" expression
 	|	expression "&&" expression
 	|	expression "||" expression
-	|	expression '<' expression
-	|	expression '>' expression
+	|	expression "<" expression
+	|	expression ">" expression
 	|	expression "<=" expression
 	|	expression ">=" expression
 	|	expression "==" expression
 	|	expression "!=" expression
-	|	expression '=' expression
+	|	expression "=" expression
 	|	expression "+=" expression
 	|	expression "-=" expression
 	|	expression "*=" expression
@@ -182,7 +202,7 @@ expression:
 	|	expression "^=" expression
 	|	expression "<<=" expression
 	|	expression ">>=" expression
-	|	'(' expression ')'
+	|	"(" expression ")"
 	;
 
 expression_list:
@@ -192,37 +212,11 @@ expression_list:
 
 expression_list_notempty:
 		expression
-	|	expression_list_notempty ',' expression
+	|	expression_list_notempty "," expression
 	;
 
 %%
 
-int main(int argc, char **argv) {
-	yyscan_t scanner;
-
-	FILE *stream;
-	if(argc > 1) {
-		FILE *f = fopen(argv[1], "r");
-		if(!f) {
-			perror("Unable to open source file");
-			exit(-1);
-		}
-
-		stream = f;
-	} else {
-		stream = stdin;
-	}
-
-	yylex_init(&scanner);
-	yyset_in(stream, scanner);
-
-	int ret = yyparse(scanner);
-
-	yylex_destroy(scanner);
-
-	return ret;
-}
-
-void yyerror (yyscan_t *scanner, char const *s) {
-	fprintf(stderr, "%s\n", s);
+void yy::test_parser::error(const location_type &loc, const std::string &message) {
+	driver.error(loc, message);
 }

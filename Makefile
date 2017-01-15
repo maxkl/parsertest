@@ -4,7 +4,7 @@ out_dir := out
 
 CC := gcc
 CFLAGS := -Wall -Wextra -O2
-LDFLAGS :=
+LDFLAGS := -lstdc++
 
 mkdirp = @dir=$(dir $@); [ -d "$$dir" ] || mkdir -p "$$dir"
 
@@ -19,14 +19,14 @@ clean:
 test:
 	@bats tests.bats
 
-$(out_dir)/test: $(out_dir)/test.y.c $(out_dir)/test.l.c
+$(out_dir)/test: $(src_dir)/main.cpp $(src_dir)/test-driver.cpp $(src_dir)/test.y.cpp $(src_dir)/test.l.cpp
 	$(mkdirp)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
-$(out_dir)/test.y.c: $(src_dir)/test.y
+$(src_dir)/test.y.cpp: $(src_dir)/test.y
 	$(mkdirp)
-	bison --defines=$(@:.c=.h) -o $@ $<
+	bison --defines=$(@:.cpp=.hpp) -o $@ $<
 
-$(out_dir)/test.l.c: $(src_dir)/test.l
+$(src_dir)/test.l.cpp: $(src_dir)/test.l
 	$(mkdirp)
-	flex --header-file=$(@:.c=.h) -o $@ $<
+	flex --header-file=$(@:.cpp=.hpp) -o $@ $<
