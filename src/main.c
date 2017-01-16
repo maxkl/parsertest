@@ -23,6 +23,8 @@ void print_help(const char *filename)  {
 	printf("  -t, --trace               print parser debugging output\n");
 	printf("  -h, --help                print this help and exit\n");
 	printf("\n");
+	printf("Pass '-' as input file name to read from stdin\n");
+	printf("\n");
 }
 
 int main(int argc, char **argv) {
