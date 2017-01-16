@@ -38,7 +38,9 @@ int parse(yyscan_t scanner, bool trace) {
 	token_t token;
 	do {
 		token = yylex(scanner);
-		print_token(token);
+		if(trace) {
+			print_token(token);
+		}
 		parser_parse(parser, token);
 	} while(token != NULL);
 	free_parser(parser);
