@@ -59,7 +59,7 @@ int parser_parse_stream(FILE *stream, bool trace) {
 int parser_parse_file(const char *filename, bool trace) {
 	FILE *stream = fopen(filename, "r");
 	if(!stream) {
-		perror("Unable to open source file");
+		fprintf(stderr, "Unable to open file: %s: %s\n", filename, strerror(errno));
 		return -1;
 	}
 
