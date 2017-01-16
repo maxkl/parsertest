@@ -9,24 +9,24 @@
 
 void print_token(token_t token) {
 	if(token == NULL) {
-		printf("TOKEN: EOF\n");
+		fprintf(stderr, "TOKEN: EOF\n");
 	} else {
-		printf("TOKEN: %i, ", token->type);
+		fprintf(stderr, "TOKEN: %i, ", token->type);
 		switch(token->data_type) {
 			case TYPE_NONE:
-				printf("none");
+				fprintf(stderr, "none");
 				break;
 			case TYPE_INT:
-				printf("int, %i", token->int_data);
+				fprintf(stderr, "int, %i", token->int_data);
 				break;
 			case TYPE_CHAR:
-				printf("char, %i=%c", token->char_data, token->char_data);
+				fprintf(stderr, "char, %i=%c", token->char_data, token->char_data);
 				break;
 			case TYPE_STRING:
-				printf("string, %s", token->string_data);
+				fprintf(stderr, "string, %s", token->string_data);
 				break;
 		}
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 }
 
