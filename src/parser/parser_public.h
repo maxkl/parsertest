@@ -5,7 +5,10 @@
 
 #include "token.h"
 
-typedef void *parser_t;
+struct parser {
+	void *parser;
+};
+typedef struct parser *parser_t;
 
 parser_t create_parser();
 void parser_trace(FILE *stream, const char *prefix);

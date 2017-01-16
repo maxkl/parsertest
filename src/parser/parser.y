@@ -9,6 +9,7 @@
 }
 
 %token_type { token_t }
+%extra_argument { parser_t parser }
 
 %syntax_error {
 	fprintf(stderr, "Syntax error!\n");
@@ -137,7 +138,11 @@ expression_list ::= expression_list COMMA expression.
 
 %code {
 	parser_t create_parser() {
-		return ParseAlloc(malloc);
+		parser_t parser = malloc(sizeof(*parser));
+		if(parser) {
+			parser->parser = ParseAlloc(malloc);
+		}
+		return parser;
 	}
 
 	void parser_trace(FILE *stream, const char *prefix) {
@@ -146,15 +151,16 @@ expression_list ::= expression_list COMMA expression.
 #endif
 	}
 
-	void free_parser(parser_t p) {
-		ParseFree(p, free);
+	void free_parser(parser_t parser) {
+		ParseFree(parser->parser, free);
+		free(parser);
 	}
 
-	void parser_parse(parser_t p, token_t t) {
+	void parser_parse(parser_t parser, token_t t) {
 		if(t == NULL) {
-			Parse(p, 0, NULL);
+			Parse(parser->parser, 0, NULL, parser);
 		} else {
-			Parse(p, t->type, t);
+			Parse(parser->parser, t->type, t, parser);
 		}
 	}
 }
