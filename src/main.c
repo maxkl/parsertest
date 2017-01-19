@@ -67,10 +67,15 @@ int main(int argc, char **argv) {
 	filename = argv[optind];
 
 	int ret;
+	ast_node_t root;
 	if(strcmp(filename, "-") == 0) {
-		ret = parser_parse_stream(stdin, trace);
+		ret = parser_parse_stream(stdin, trace, &root);
 	} else {
-		ret = parser_parse_file(filename, trace);
+		ret = parser_parse_file(filename, trace, &root);
+	}
+	if(ret == 0) {
+		print_ast_node(root);
+		free_ast_node(root, true);
 	}
 	return ret;
 }

@@ -42,8 +42,6 @@
 ")"							{ return create_token(RPAREN); }
 "{"							{ return create_token(LBRACE); }
 "}"							{ return create_token(RBRACE); }
-"["							{ return create_token(LBRACKET); }
-"]"							{ return create_token(RBRACKET); }
 "<<"						{ return create_token(SHIFT_LEFT); }
 ">>"						{ return create_token(SHIFT_RIGHT); }
 "&&"						{ return create_token(AND); }
@@ -52,16 +50,6 @@
 ">="						{ return create_token(GREATER_EQUAL); }
 "=="						{ return create_token(EQUAL); }
 "!="						{ return create_token(NOT_EQUAL); }
-"+="						{ return create_token(ADD_ASSIGN); }
-"-="						{ return create_token(SUBTRACT_ASSIGN); }
-"*="						{ return create_token(MULTIPLY_ASSIGN); }
-"/="						{ return create_token(DIVIDE_ASSIGN); }
-"%="						{ return create_token(MODULO_ASSIGN); }
-"&="						{ return create_token(BIT_AND_ASSIGN); }
-"^="						{ return create_token(BIT_XOR_ASSIGN); }
-"|="						{ return create_token(BIT_OR_ASSIGN); }
-"<<="						{ return create_token(SHIFT_LEFT_ASSIGN); }
-">>="						{ return create_token(SHIFT_RIGHT_ASSIGN); }
 
 void						{ return create_token(VOID); }
 int							{ return create_token(INT); }
