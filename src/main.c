@@ -66,16 +66,32 @@ int main(int argc, char **argv) {
 
 	filename = argv[optind];
 
-	int ret;
+	enum parser_status status;
 	ast_node_t root;
 	if(strcmp(filename, "-") == 0) {
-		ret = parser_parse_stream(stdin, trace, &root);
+		status = parser_parse_stream(stdin, trace, &root);
 	} else {
-		ret = parser_parse_file(filename, trace, &root);
+		status = parser_parse_file(filename, trace, &root);
 	}
-	if(ret == 0) {
+
+	if(status == PARSER_OK) {
 		print_ast_node(root);
 		free_ast_node(root, true);
+	} else {
+		fprintf(stderr, "Parsing failed: ");
+		switch(status) {
+			case PARSER_FAILED_SYNTAX_ERROR:
+				fprintf(stderr, "Syntax error");
+				break;
+			case PARSER_FAILED_STACK_OVERFLOW:
+				fprintf(stderr, "Parser stack overflowed");
+				break;
+			default:
+				fprintf(stderr, "Error");
+		}
+		fprintf(stderr, "\n");
+		return 1;
 	}
-	return ret;
+
+	return 0;
 }

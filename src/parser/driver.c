@@ -30,7 +30,7 @@ void print_token(token_t token) {
 	}
 }
 
-int parse(yyscan_t scanner, bool trace, ast_node_t *root) {
+enum parser_status parse(yyscan_t scanner, bool trace, ast_node_t *root) {
 	parser_t parser = create_parser();
 	if(trace) {
 		parser_trace(stderr, "PARSER: ");
@@ -42,31 +42,32 @@ int parse(yyscan_t scanner, bool trace, ast_node_t *root) {
 			print_token(token);
 		}
 		parser_parse(parser, token);
-	} while(token != NULL);
+	} while(parser->status == PARSER_ACTIVE && token != NULL);
 	*root = parser->root;
+	enum parser_status status = parser->status;
 	free_parser(parser);
-	return 0;
+	return status;
 }
 
-int parser_parse_stream(FILE *stream, bool trace, ast_node_t *root) {
+enum parser_status parser_parse_stream(FILE *stream, bool trace, ast_node_t *root) {
 	yyscan_t scanner;
 	yylex_init(&scanner);
 	yyset_in(stream, scanner);
-	int ret = parse(scanner, trace, root);
+	enum parser_status status = parse(scanner, trace, root);
 	yylex_destroy(scanner);
-	return ret;
+	return status;
 }
 
-int parser_parse_file(const char *filename, bool trace, ast_node_t *root) {
+enum parser_status parser_parse_file(const char *filename, bool trace, ast_node_t *root) {
 	FILE *stream = fopen(filename, "r");
 	if(!stream) {
 		fprintf(stderr, "Unable to open file: %s: %s\n", filename, strerror(errno));
 		return -1;
 	}
 
-	int ret = parser_parse_stream(stream, trace, root);
+	enum parser_status status = parser_parse_stream(stream, trace, root);
 
 	fclose(stream);
 
-	return ret;
+	return status;
 }

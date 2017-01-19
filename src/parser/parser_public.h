@@ -5,8 +5,10 @@
 
 #include "token.h"
 #include "ast.h"
+#include "driver.h"
 
 struct parser {
+	enum parser_status status;
 	void *parser;
 	ast_node_t root;
 };

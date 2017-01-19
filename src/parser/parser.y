@@ -14,19 +14,19 @@
 %default_type { ast_node_t }
 
 %syntax_error {
-	fprintf(stderr, "Syntax error!\n");
+	parser->status = PARSER_FAILED_SYNTAX_ERROR;
 }
 
 %parse_accept {
-	printf("Parsing complete.\n");
+	parser->status = PARSER_OK;
 }
 
 %parse_failure {
-	fprintf(stderr, "Parsing failed.\n");
+	parser->status = PARSER_FAILED;
 }
 
 %stack_overflow {
-	fprintf(stderr, "Parser stack overflow.\n");
+	parser->status = PARSER_FAILED_STACK_OVERFLOW;
 }
 
 %token_destructor {
@@ -157,6 +157,7 @@ expression_list_not_empty(R) ::= expression_list_not_empty(A) COMMA expression(B
 	parser_t create_parser() {
 		parser_t parser = malloc(sizeof(*parser));
 		if(parser) {
+			parser->status = PARSER_ACTIVE;
 			parser->parser = ParseAlloc(malloc);
 			parser->root = NULL;
 		}
