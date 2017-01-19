@@ -1,10 +1,14 @@
 
+RELEASE ?=
+
 # Directory names
 src_dir := src
-out_dir := out
+out_dir_base := out
+
+EXENAME := test
 
 CC := gcc
-CFLAGS := -Wall -Wextra -O2
+CFLAGS := -Wall -Wextra
 LDFLAGS :=
 
 LEMON := tools/lemon/lemon
@@ -19,8 +23,17 @@ no-dep-targets = clean test
 # Usage: $(mkdirp)
 mkdirp = @dir=$(dir $@); [ -d "$$dir" ] || mkdir -p "$$dir"
 
+ifeq ($(RELEASE),)
+out_dir := $(out_dir_base)/debug
+CFLAGS += -O0 -g
+else
+out_dir := $(out_dir_base)/release
+CFLAGS += -O2
+endif
+EXE := $(out_dir)/$(EXENAME)
+
 .PHONY: all
-all: $(out_dir)/test
+all: $(EXE)
 
 .PHONY: clean
 clean:
@@ -40,7 +53,7 @@ objs := $(addprefix $(out_dir)/,$(objs))
 $(LEMON): $(dir $(LEMON))lemon.c
 	gcc -Wall -Wextra -O2 -o $@ $^
 
-$(out_dir)/test: $(objs)
+$(EXE): $(objs)
 	$(mkdirp)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(libs) $(objs)
 
