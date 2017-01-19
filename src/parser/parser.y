@@ -34,7 +34,7 @@
 }
 
 %default_destructor {
-	free_ast_node($$, false);
+	free_ast_node($$, true);
 }
 
 %left COMMA.
