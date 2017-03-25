@@ -44,7 +44,7 @@ clean:
 test:
 	bats tests.bats
 
-objs := parser/ast.o parser/parser.o parser/lexer.o parser/token.o parser/driver.o main.o
+objs := mem.o parser/ast.o parser/parser.o parser/lexer.o parser/token.o parser/driver.o runtime/runtime.o main.o
 libs :=
 
 # Prepend the output directory to all object file paths

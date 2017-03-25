@@ -6,6 +6,7 @@
 #include <getopt.h>
 
 #include "parser/driver.h"
+#include "runtime/runtime.h"
 
 static const char *short_options = "ht";
 static const struct option long_options[] = {
@@ -76,7 +77,10 @@ int main(int argc, char **argv) {
 
 	if(status == PARSER_OK) {
 		print_ast_node(root);
+		int exit_code;
+		int ret = runtime_run_ast(root, &exit_code);
 		free_ast_node(root, true);
+		return (ret != 0) ? ret : exit_code;
 	} else {
 		fprintf(stderr, "Parsing failed: ");
 		switch(status) {
