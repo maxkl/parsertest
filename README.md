@@ -4,7 +4,7 @@ For the syntax see `test/`.
 
 ## Building
 
-Using [GCC](https://gcc.gnu.org/), [GNU Bison](https://www.gnu.org/software/bison/) and [flex](https://github.com/westes/flex)
+Using [GCC](https://gcc.gnu.org/), [lemon](http://www.hwaci.com/sw/lemon/) and [flex](https://github.com/westes/flex)
 
 ```sh
 make
@@ -13,7 +13,7 @@ make
 ## Usage
 
 ```sh
-out/test # read from stdin
+out/test -h # usage information
 out/test path/to/file.tst # read from file
 ```
 
